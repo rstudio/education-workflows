@@ -6,7 +6,7 @@ runs:
     - name: Fix indents and trailing invisible characters
       uses: rstudio/education-workflows/.github/internal/run-r-command@v1
         with:
-          run: |
+          code: |
             # tabs to spaces and remove trailing whitespace
             transform_indent_two_spaces <- styler::create_style_guide(
               style_guide_name = "Indent with two spaces",

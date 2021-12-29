@@ -1,7 +1,7 @@
 name: 'Run an R Command'
 description: 'Runs an R command and optionally commits updated files'
 inputs:
-  command:
+  code:
     description: The R code to run
     required: true
   commit:
@@ -22,7 +22,7 @@ runs:
     - name: Run R Code
       shell: Rscript {0}
       run: |
-        ${{ inputs.command }}
+        ${{ inputs.code }}
     - if: inputs.commit == 'true'
       shell: bash
       run: |

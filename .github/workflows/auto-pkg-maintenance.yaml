@@ -81,13 +81,13 @@ jobs:
       - name: Tidy Description
         uses: rstudio/education-workflows/.github/internal/run-r-command@v1
         with:
-          run: "usethis::use_tidy_description()"
+          code: "usethis::use_tidy_description()"
           description: Tidy Description
 
       - name: Document
         uses: rstudio/education-workflows/.github/internal/run-r-command@v1
         with:
-          run: "roxygen2::roxygenise()"
+          code: "roxygen2::roxygenise()"
           description: Document
           commit-add: "man/* NAMESPACE"
 
@@ -99,7 +99,7 @@ jobs:
         if: ${{ github.event_name == 'push' && contains(github.ref, '/rc-v') }}
         uses: rstudio/education-workflows/.github/internal/run-r-command@v1
         with:
-          run: |
+          code: |
             pak::pkg_install("r-lib/urlchecker")
             urlchecker::url_update()
           description: Updated Links
