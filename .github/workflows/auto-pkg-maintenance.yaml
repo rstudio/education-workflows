@@ -78,7 +78,9 @@ jobs:
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           # Ignore anything left behind in .github
-          git update-index --skip-worktree .github
+          if [ -f .github/pkg.lock ]; then
+            git update-index --skip-worktree .github/pkg.lock
+          fi
 
       - name: Tidy Description
         uses: rstudio/education-workflows/.github/internal/run-r-command@v1
