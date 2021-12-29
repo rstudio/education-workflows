@@ -48,6 +48,23 @@ Auto package maintenance performs the following common tasks:
 
 6. Lint the package and provide lint feedback as annotations (in PRs) using the [lintr package](https://github.com/r-lib/lintr).
 
+### Auto Maintenance Updates
+
 If automated package maintenance is run from an internal PR, these updates are pushed to the PR branch. If the PR originated from a fork and any of the above tasks changed the source code, the check fails with an informative message.
 
-If auto package maintenance is run from the main branch of the primary source repository, a PR is opened with the changes. The PR is automatically managed: if subsequent changes are added to the main branch, the PR is updated via force push, or the PR is closed if the changes resolved any package maintenance needs.
+If auto package maintenance is run from the main branch of the primary source repository, a PR is opened with the changes. The PR is automatically managed: if subsequent changes are added to the main branch, the PR is updated via force push, or the PR is closed if the changes resolved any package maintenance needs. The branch name for the automated PR is `auto-pkg-maintenance`, and this workflow assumes the default branch is `main`.
+
+## Development
+
+Currently, the workflows and actions in the branch are `v1`. When you make changes to the updates, the `v1` tag should be (forcefully) moved forward to the latest commit in `rstudio/education-workflows`. To do this run:
+
+```bash
+git tag -f v1
+git push origin --tags -f
+```
+
+## License ![CC0 licensed](https://img.shields.io/github/license/rstudio/education-workflows)
+
+All examples in this repository are published with the [CC0](./LICENSE) license.
+
+
