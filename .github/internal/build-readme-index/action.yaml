@@ -1,0 +1,32 @@
+name: 'Build README and index files'
+description: 'Builds README.Rmd and index.Rmd files.'
+runs:
+  using: "composite"
+  steps:
+    - name: Build Rmd
+      run: |
+       if [ -f "README.Rmd" ]; then
+         Rscript -e 'devtools::build_readme(quiet = FALSE)'
+         git add man/figures/README\* README.md && \
+         git commit -m 'Re-build README.Rmd (GitHub Actions)' || \
+         echo "No readme changes to commit"
+       else
+         echo "No README.Rmd to build"
+       fi
+       if [ -f "index.Rmd" ]; then
+         Rscript -e 'rmarkdown::render("index.Rmd", quiet = FALSE, output_options = list(html_preview = FALSE))'
+         git add index.* && \
+         git commit -m 'Re-build index.Rmd (GitHub Actions)' || \
+         echo "No index.Rmd changes to commit"
+       else
+         echo "No index.Rmd to build"
+       fi
+       if [ -f "pkgdown/index.Rmd" ]; then
+         Rscript -e 'rmarkdown::render("pkgdown/index.Rmd", quiet = FALSE, output_options = list(html_preview = FALSE))'
+         git add pkgdown/index.* && \
+         git commit -m 'Re-build pkgdown/index.Rmd (GitHub Actions)' || \
+         echo "No pkgdown/index.Rmd changes to commit"
+       else
+         echo "No pkgdown/index.Rmd to build"
+       fi
+

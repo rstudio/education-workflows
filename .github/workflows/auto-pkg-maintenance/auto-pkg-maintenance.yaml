@@ -1,0 +1,144 @@
+# Workflow inspired by:
+#   - https://github.com/rstudio/shiny-workflows/blob/main/.github/workflows/routine.yaml
+#   - https://github.com/r-lib/actions/blob/master/examples/lint.yaml
+#   - https://github.com/r-lib/actions/blob/master/examples/render-rmarkdown.yaml
+
+on:
+  workflow_call:
+    inputs:
+      extra-packages:
+        type: string
+        default: ""
+        required: false
+      cache-version:
+        type: string
+        default: "2"
+        required: false
+      pandoc-version:
+        type: string
+        default: "2.7.3"
+        required: false
+      # staticimports:
+      #   type: boolean
+      #   default: true
+      #   required: false
+      source-repository-owner:
+        description: The owner of the source repo. Used to disable tasks that aren't intended for repository forks.
+        type: string
+        default: rstudio
+        required: false
+
+name: Auto Package Maintenance
+
+jobs:
+  auto-pkg-maintenance:
+    runs-on: ubuntu-20.04
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+        # Make sure the PR branch is checked out for pull requests
+      - name: Git Pull (PR)
+        if: github.event_name == 'pull_request'
+        uses: r-lib/actions/pr-fetch@v2
+        with:
+          repo-token: ${{ github.token }}
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-pandoc@v2
+        with:
+          pandoc-version: ${{ inputs.pandoc-version }}
+
+      - uses: r-lib/actions/setup-r-dependencies@v1
+        with:
+          cache-version: ${{ inputs.cache-version }}
+          extra-packages: |
+            local::.
+            lintr
+            styler
+            devtools
+            rmarkdown
+            ${{ inputs.extra-packages }}
+
+      - name: Git Config
+        run: |
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          # Ignore anything left behind in .github
+          git update-index --skip-worktree .github
+
+      - name: Tidy Description
+        uses: rstudio/education-workflows/.github/internal/run-r-command@v1
+        with:
+          run: "usethis::use_tidy_description()"
+          description: Tidy Description
+
+      - name: Document
+        uses: rstudio/education-workflows/.github/internal/run-r-command@v1
+        with:
+          run: "roxygen2::roxygenise()"
+          description: Document
+          commit-add: "man/\* NAMESPACE"
+
+      - name: Build README and index
+        uses: rstudio/education-workflows/.github/internal/build-readme-index@v1
+
+      - name: URL redirects
+        # Only perform if in an RC branch (`rc-vX.Y.Z`)
+        if: ${{ github.event_name == 'push' && contains(github.ref, '/rc-v') }}
+        uses: rstudio/education-workflows/.github/internal/run-r-command@v1
+        with:
+          run: |
+            pak::pkg_install("r-lib/urlchecker")
+            urlchecker::url_update()
+          description: Updated Links
+
+      - name: Fix indents and trailing invisible characters
+        uses: rstudio/education-workflows/.github/internal/fix-invisibles@v1
+
+        # When pushing to main causes package maintenance, create a pull request
+      - name: Create Pull Request
+        id: create-pull-request
+        if: ${{ github.event_name == 'push' && github.repository_owner == inputs.source-repository-owner }}
+        uses: peter-evans/create-pull-request@v3
+        with:
+          base: main
+          branch: auto-pkg-maintenance
+          commit-message: "Package maintenance (Github Actions)"
+          title: "Automated package maintenance"
+          body: >
+            Automated package maintenance changes from
+            <${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}>
+
+      - name: Notify Pull Request
+        if: steps.create-pull-request.outputs.pull-request-operation
+        run: |
+          echo "::notice title=Package Maintenance:: Pull request #${{ steps.create-pull-request.outputs.pull-request-number }} ${{ steps.create-pull-request.outputs.pull-request-operation }}: ${{ steps.create-pull-request.outputs.pull-request-url }}"
+
+        # If we're in an internal PR, push back to the PR branch
+      - name: Git Push (PR)
+        uses: r-lib/actions/pr-push@v2
+        if: github.event_name == 'pull_request' && !github.event.pull_request.head.repo.full_name == github.repository
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+        # Otherwise, throw an error if there were commits
+      - name: Verify no new commits in PR from fork
+        # Forked repos only have `read` access given the default token. This makes pushing back to the forked repo not possible.
+        # See https://docs.github.com/en/actions/security-guides/automatic-token-authentication#permissions-for-the-github_token
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork
+        uses: rstudio/shiny-workflows/.github/internal/verify-no-new-commits@v1
+        with:
+          upstream: "pr/${{ github.event.pull_request.head.ref }}"
+          statement: "GHA is not allowed to push commits back to a forked repo."
+          action: "Please perform and commit these actions manually. It may help to merge in the latest changes from the base branch."
+
+      - name: Lint Package
+        if: github.event_name == 'pull_request'
+        uses: rstudio/education-workflows/lintr-annotate@v1

@@ -1,0 +1,10 @@
+name: 'Lint and Annotate Package'
+description: 'Runs lintr and adds linting advice as annotations via GitHub Actions messages.'
+runs:
+  using: "composite"
+  steps:
+    - name: Lint Package
+      run: Rscript $GITHUB_ACTION_PATH/lintr-annotate.R
+      shell: bash
+      env:
+        LINTR_COMMENT_BOT: false

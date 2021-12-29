@@ -1,0 +1,30 @@
+name: 'Run an R Command'
+description: 'Runs an R command and optionally commits updated files'
+inputs:
+  command:
+    description: The R code to run
+    required: true
+  commit:
+    description: Should updated files be committed?
+    required: false
+    default: true
+  description:
+    description: The description of the action used in the commit message
+    required: false
+    default: "Run R command"
+  commit-add:
+    description: Arguments passed to git add
+    required: false
+    default: "-u"
+runs:
+  using: "composite"
+  steps:
+    - name: Run R Code
+      shell: Rscript {0}
+      run: |
+        ${{ inputs.command }}
+    - if: inputs.commit == 'true'
+      run: |
+        git add ${{ inputs.commit-add }} && \
+        git commit -m '${{ inputs.description }} (GitHub Actions)' || \
+        echo "No changes from ${{ inputs.description }}"
