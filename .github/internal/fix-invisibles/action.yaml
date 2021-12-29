@@ -5,23 +5,23 @@ runs:
   steps:
     - name: Fix indents and trailing invisible characters
       uses: rstudio/education-workflows/.github/internal/run-r-command@v1
-        with:
-          code: |
-            # tabs to spaces and remove trailing whitespace
-            transform_indent_two_spaces <- styler::create_style_guide(
-              style_guide_name = "Indent with two spaces",
-              style_guide_version = "1.0.0",
-              indention = local({
-                ts <- styler::tidyverse_style()$indention
-                ts$unindent_fun_dec <- NULL
-                ts$update_indention_ref_fun_dec <- NULL
-                ts
-              }),
-              reindention = styler::specify_reindention(indention = 2, comments_only = FALSE)
-            )
+      with:
+        code: |
+          # tabs to spaces and remove trailing whitespace
+          transform_indent_two_spaces <- styler::create_style_guide(
+            style_guide_name = "Indent with two spaces",
+            style_guide_version = "1.0.0",
+            indention = local({
+              ts <- styler::tidyverse_style()$indention
+              ts$unindent_fun_dec <- NULL
+              ts$update_indention_ref_fun_dec <- NULL
+              ts
+            }),
+            reindention = styler::specify_reindention(indention = 2, comments_only = FALSE)
+          )
 
-            styler::style_pkg(
-              transformers = transform_indent_two_spaces,
-              include_roxygen_examples = FALSE,
-            )
-          description: Fix invisible characters
+          styler::style_pkg(
+            transformers = transform_indent_two_spaces,
+            include_roxygen_examples = FALSE,
+          )
+        description: Fix invisible characters
