@@ -24,6 +24,7 @@ runs:
       run: |
         ${{ inputs.command }}
     - if: inputs.commit == 'true'
+      shell: bash
       run: |
         git add ${{ inputs.commit-add }} && \
         git commit -m '${{ inputs.description }} (GitHub Actions)' || \

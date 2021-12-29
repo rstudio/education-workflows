@@ -4,6 +4,7 @@ runs:
   using: "composite"
   steps:
     - name: Build Rmd
+      shell: bash
       run: |
        if [ -f "README.Rmd" ]; then
          Rscript -e 'devtools::build_readme(quiet = FALSE)'
