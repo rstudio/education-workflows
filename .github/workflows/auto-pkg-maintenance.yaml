@@ -62,7 +62,7 @@ jobs:
         with:
           pandoc-version: ${{ inputs.pandoc-version }}
 
-      - uses: r-lib/actions/setup-r-dependencies@v1
+      - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           cache-version: ${{ inputs.cache-version }}
           extra-packages: |
