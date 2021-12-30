@@ -2,13 +2,17 @@
 
 ```yaml
 on:
-  push:
-    branches: main
-    
+  workflow_run:
+    workflows: ["R-CMD-check"]
+    branches: [main]
+    types:
+      - completed
+
 name: Deploy Tutorials to shinyapps.io
 
 jobs:
   deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
