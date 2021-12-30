@@ -9,6 +9,12 @@ The primary goal of this repository is to automate package maintenance tasks for
 
 ## Auto Package Maintenance
 
+### Usage
+
+To use the **auto-pkg-maintenance** workflow, create a new workflow in your repository at: `.github/workflows/auto-pkg-maintenance.yaml`.
+
+The safest option is to run maintenance on `pull_request` events or `push` events to your `main` branch.
+
 ```yaml
 on:
   pull_request:
@@ -21,6 +27,28 @@ jobs:
   auto-pkg-maintenance:
     uses: rstudio/education-workflows/.github/workflows/auto-pkg-maintenance.yaml@v1
 ```
+
+The disadvantage of the above configuration is that the automated package maintenance will not be able to push back to pull requests from forked repositories. This is because the `pull_request` event has limited scope for writing back to forked repos, in order to [prevent abusive PRs](https://securitylab.github.com/research/github-actions-preventing-pwn-requests/).
+
+In short: auto package maintenance is a low-risk action but should not be run against untrusted code. It is possible to enable the auto package maintenance workflow to push back to externally contributed pull requests, but only after the repository owner has manually reviewed the code and added an **auto-pkg-maintenance** label to the PR.
+
+```yaml
+on:
+  pull_request_target:
+    types: [opened, synchronize, labeled]
+  push:
+    branches: main
+
+name: Package Maintenance
+
+jobs:
+  auto-pkg-maintenance:
+    # optionally skip workflow if a specific label is missing (uncomment to enable)
+    # if: github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'auto-pkg-maintenance')
+    uses: rstudio/education-workflows/.github/workflows/auto-pkg-maintenance.yaml@v1
+```
+
+`auto-pkg-maintenance` is configured to stop immediately if the PR is missing the **auto-pkg-maintenance** label. In the above configuration, auto maintenance will run when a PR is labelled so that adding the correct label triggers a maintenance workflow run. If you want, you can also configure the calling action to skip maintenance entirely if the label is missing.
 
 ### Inputs
 
