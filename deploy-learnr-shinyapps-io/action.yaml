@@ -68,6 +68,7 @@ runs:
       with:
         cache-version: ${{ inputs.cache-version }}
         needs: deploy
+        dependencies: "TRUE"
         extra-packages: |
           ${{ inputs.learnr-ref }}
           rsconnect
