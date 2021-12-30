@@ -59,6 +59,7 @@ runs:
 
     - name: Install libcurl
       if: runner.os == 'Linux'
+      shell: bash
       run: |
         sudo -s apt-get update
         sudo -s apt-get install -y libcurl4-openssl-dev
