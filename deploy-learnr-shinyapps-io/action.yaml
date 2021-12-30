@@ -1,0 +1,85 @@
+name: 'Deploy learnr tutorials to shinyapps.io'
+description: 'Deploys learnr tutorials to shinyapps.io'
+inputs:
+  shinyapps-name:
+    description: "Name of shinapps.io account, see rsconnect::setAccountInfo()"
+    type: string
+    required: true
+  shinyapps-token:
+    description: "User token for the account, see rsconnect::setAccountInfo()"
+    type: string
+    required: true
+  shinyapps-secret:
+    description: "User secret for the account, see rsconnect::setAccountInfo()"
+    type: string
+    required: true
+  shinyapps-server:
+    description: "URL for shinyapps server"
+    type: string
+    default: "https://shinyapps.io"
+    required: false
+  tutorials:
+    description: "Paths to individual tutorials or directories containing tutorials to deploy, separated by new lines, spaces or commas."
+    type: string
+    required: true
+  learnr-ref:
+    description: "Package reference for installing learnr, passed to `pak::pak()`."
+    type: string
+    default: "github::rstudio/learnr?reinstall"
+    required: false
+  extra-packages:
+    type: string
+    default: ""
+    required: false
+  cache-version:
+    type: string
+    default: "2"
+    required: false
+  pandoc-version:
+    type: string
+    default: "2.7.3"
+    required: false
+  r-version:
+    description: "R version used for deploy"
+    type: string
+    default: "release"
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - uses: r-lib/actions/setup-r@v2
+      id: install-r
+      with:
+        use-public-rspm: true
+        r-version: ${{ inputs.r-version }}
+
+    - uses: r-lib/actions/setup-pandoc@v2
+      with:
+        pandoc-version: ${{ inputs.pandoc-version }}
+
+    - name: Install libcurl
+      if: runner.os == 'Linux'
+      run: |
+        sudo -s apt-get update
+        sudo -s apt-get install -y libcurl4-openssl-dev
+
+    - uses: r-lib/actions/setup-r-dependencies@v2
+      with:
+        cache-version: ${{ inputs.cache-version }}
+        needs: deploy
+        extra-packages: |
+          ${{ inputs.learnr-ref }}
+          rsconnect
+          callr
+          fs
+          ${{ inputs.extra-packages }}
+
+    - name: Deploy Tutorials
+      env:
+        SHINYAPPS_NAME: ${{ inputs.shinyapps-name }}
+        SHINYAPPS_TOKEN: ${{ inputs.shinyapps-token }}
+        SHINYAPPS_SECRET: ${{ inputs.shinyapps-secret }}
+        SHINYAPPS_SERVER: ${{ inputs.shinyapps-server }}
+        TUTORIAL_PATHS: ${{ inputs.tutorials }}
+      shell: bash
+      run: Rscript $GITHUB_ACTION_PATH/deploy-learnr-shinyapps-io.R
