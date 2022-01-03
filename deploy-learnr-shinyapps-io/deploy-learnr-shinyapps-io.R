@@ -136,7 +136,6 @@ deploy_tutorial <- function(rmd) {
     appPrimaryDoc = rmd_file,
     appName = fs::path_ext_remove(rmd_file),
     server = if (nzchar(server)) server,
-    account = Sys.getenv("SHINYAPPS_NAME"),
     forceUpdate = TRUE,
     lint = FALSE,
     logLevel = "verbose"
