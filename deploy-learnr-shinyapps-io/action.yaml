@@ -70,12 +70,11 @@ runs:
       with:
         cache-version: ${{ inputs.cache-version }}
         needs: deploy
-        dependencies: "TRUE"
         extra-packages: |
           ${{ inputs.learnr-ref }}
-          rsconnect
-          callr
-          fs
+          any::rsconnect
+          any::callr
+          any::fs
           ${{ inputs.extra-packages }}
 
     - name: Deploy Tutorials
