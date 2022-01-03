@@ -16,7 +16,7 @@ inputs:
   shinyapps-server:
     description: "URL for shinyapps server"
     type: string
-    default: "https://shinyapps.io"
+    default: "shinyapps.io"
     required: false
   tutorials:
     description: "Paths to individual tutorials or directories containing tutorials to deploy, separated by new lines, spaces or commas."

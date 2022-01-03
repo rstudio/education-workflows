@@ -129,7 +129,7 @@ deploy_tutorial <- function(rmd) {
 
   rmd_file <- fs::path_file(rmd)
 
-  server <- Sys.getenv("SHINYAPPS_SERVER", "")
+  server <- Sys.getenv("SHINYAPPS_SERVER", "shinyapps.io")
 
   rsconnect::deployApp(
     appDir = fs::path_dir(rmd),
