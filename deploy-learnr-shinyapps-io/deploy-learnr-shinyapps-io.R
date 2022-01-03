@@ -36,10 +36,21 @@ gha_msg <- function(level = "notice", ..., title = NULL) {
 
 set_account_info <- function() {
   rsconnect::setAccountInfo(
-    name   = Sys.getenv("SHINYAPPS_NAME"),
-    token  = Sys.getenv("SHINYAPPS_TOKEN"),
-    secret = Sys.getenv("SHINYAPPS_SECRET")
+    name   = get_env("SHINYAPPS_NAME"),
+    token  = get_env("SHINYAPPS_TOKEN"),
+    secret = get_env("SHINYAPPS_SECRET")
   )
+}
+
+get_env <- function(name) {
+  val <- Sys.getenv(name, "")
+  if (nzchar(val)) {
+    return(val)
+  }
+
+  name <- gsub("_", "-", tolower(name))
+
+  stop(name, " is required but was not provided.", call. = FALSE)
 }
 
 tutorials_get_input <- function() {
