@@ -1,7 +1,10 @@
 #! /usr/bin/env Rscript
 # deploy tutorials (by directory) to shinyapps.io
 
-options("rsconnect.error.trace" = TRUE)
+options(
+  rsconnect.error.trace = TRUE,
+  packrat.RecursiveInference = FALSE
+)
 
 
 # Deploy Process Overview -------------------------------------------------
@@ -138,7 +141,7 @@ deploy_tutorial <- function(rmd) {
     server = if (nzchar(server)) server,
     forceUpdate = TRUE,
     lint = FALSE,
-    logLevel = "verbose"
+    logLevel = "debug"
   )
 }
 

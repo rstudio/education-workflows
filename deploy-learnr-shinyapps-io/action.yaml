@@ -71,11 +71,15 @@ runs:
         cache-version: ${{ inputs.cache-version }}
         needs: deploy
         extra-packages: |
-          ${{ inputs.learnr-ref }}
           any::rsconnect
           any::callr
           any::fs
           ${{ inputs.extra-packages }}
+
+    - name: Install learnr
+      shell: Rscript {0}
+      run: |
+        pak::pak("${{ inputs.learnr-ref }}")
 
     - name: Deploy Tutorials
       env:
