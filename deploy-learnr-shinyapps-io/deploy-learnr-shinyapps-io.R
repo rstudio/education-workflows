@@ -141,7 +141,7 @@ deploy_tutorial <- function(rmd) {
     server = if (nzchar(server)) server,
     forceUpdate = TRUE,
     lint = FALSE,
-    logLevel = "debug"
+    logLevel = "normal"
   )
 }
 
