@@ -123,12 +123,12 @@ deploy_tutorial <- function(rmd) {
   rsconnect::deployApp(
     appDir = fs::path_dir(rmd),
     appPrimaryDoc = rmd_file,
-    name = fs::path_ext_remove(rmd_file),
+    appName = fs::path_ext_remove(rmd_file),
     server = if (nzchar(server)) server,
     account = Sys.getenv("SHINYAPPS_NAME"),
     forceUpdate = TRUE,
     lint = FALSE,
-    verbose = TRUE
+    logLevel = "verbose"
   )
 }
 
