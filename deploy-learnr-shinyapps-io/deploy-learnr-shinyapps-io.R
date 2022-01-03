@@ -3,6 +3,9 @@
 
 options("rsconnect.error.trace" = TRUE)
 
+
+# Deploy Process Overview -------------------------------------------------
+
 main <- function() {
   set_account_info()
   tutorials_input <- tutorials_get_input()
@@ -11,6 +14,8 @@ main <- function() {
     deploy_tutorial(tutorial)
   }
 }
+
+# Helper Functions --------------------------------------------------------
 
 gha_msg <- function(level = "notice", ..., title = NULL) {
   level <- match.arg(level, c("debug", "notice", "warning", "error"))
@@ -113,11 +118,13 @@ deploy_tutorial <- function(rmd) {
 
   rmd_file <- fs::path_file(rmd)
 
+  server <- Sys.getenv("SHINYAPPS_SERVER", "")
+
   rsconnect::deployApp(
     appDir = fs::path_dir(rmd),
     appPrimaryDoc = rmd_file,
     name = fs::path_ext_remove(rmd_file),
-    server = Sys.getenv("SHINYAPPS_SERVER"),
+    server = if (nzchar(server)) server,
     account = Sys.getenv("SHINYAPPS_NAME"),
     forceUpdate = TRUE,
     lint = FALSE,
@@ -125,6 +132,9 @@ deploy_tutorial <- function(rmd) {
   )
 }
 
-
+# Run deploy steps --------------------------------------------------------
+if (!interactive()) {
+  main()
+}
 
 
