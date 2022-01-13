@@ -39,7 +39,12 @@ jobs:
 
     steps:
       - name: Test for auto-pkg-maintenance label
-        if: github.event_name == 'pull_request_target' && !contains(github.event.pull_request.labels.*.name, 'auto-pkg-maintenance')
+        if: >-
+          ( github.event_name == 'pull_request_target' ) &&
+          (
+            github.event.pull_request.head.repo.fork == false ||
+            !contains(github.event.pull_request.labels.*.name, 'auto-pkg-maintenance')
+          )
         shell: bash
         run: |
           echo "::error::Manual approval by the repository owner is required to enable automatic package maintenance on this PR."
