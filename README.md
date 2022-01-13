@@ -60,6 +60,8 @@ jobs:
 
 - `pandoc-version`: Sets the pandoc version to be installed, passed to [r-lib/actions@v2/setup-pandoc](https://github.com/r-lib/actions/tree/v2/setup-pandoc).
 
+- `approved-pr-label`: The name of the label indicating the external PR has been approved for the Auto Package Maintenance workflow. The workflow will not be run for unapproved external PRs when associated with a [`pull_request_target` event](https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows#pull_request_target).
+
 ### Tasks
 
 Auto package maintenance performs the following common tasks:

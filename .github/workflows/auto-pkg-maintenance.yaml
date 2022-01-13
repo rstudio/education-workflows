@@ -27,6 +27,15 @@ on:
         type: string
         default: rstudio
         required: false
+      approved-pr-label:
+        description: |
+          The name of the label indicating the external PR has been approved
+          for the Auto Package Maintenance workflow. The workflow will not be
+          run for unapproved external PRs when associated with a
+          'pull_request_target' event.
+        type: string
+        default: auto-pkg-maintenance
+        required: false
 
 name: Auto Package Maintenance
 
@@ -40,11 +49,9 @@ jobs:
     steps:
       - name: Test for auto-pkg-maintenance label
         if: >-
-          ( github.event_name == 'pull_request_target' ) &&
-          (
-            github.event.pull_request.head.repo.fork == true &&
-            !contains(github.event.pull_request.labels.*.name, 'auto-pkg-maintenance')
-          )
+          github.event_name == 'pull_request_target' &&
+          github.event.pull_request.head.repo.fork == true &&
+          !contains(github.event.pull_request.labels.*.name, '${{ inputs.approved-pr-label }}')
         shell: bash
         run: |
           echo "::error::Manual approval by the repository owner is required to enable automatic package maintenance on this PR."
