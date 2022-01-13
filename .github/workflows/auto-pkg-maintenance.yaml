@@ -77,9 +77,10 @@ jobs:
         run: |
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          # Ignore anything left behind in .github
-          if [ -f .github/pkg.lock ]; then
-            git update-index --skip-worktree .github/pkg.lock
+          git status --porcelain
+          # Remove the pkg.lock file created by setup-r-dependencies
+          if [[ -f ".github/pkg.lock" ]]; then
+            rm .github/pkg.lock
           fi
 
       - name: Tidy Description
