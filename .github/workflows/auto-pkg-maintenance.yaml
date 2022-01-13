@@ -42,7 +42,7 @@ jobs:
         if: >-
           ( github.event_name == 'pull_request_target' ) &&
           (
-            github.event.pull_request.head.repo.fork == false ||
+            github.event.pull_request.head.repo.fork == true &&
             !contains(github.event.pull_request.labels.*.name, 'auto-pkg-maintenance')
           )
         shell: bash
