@@ -49,6 +49,7 @@ jobs:
     steps:
       - name: Test for auto-pkg-maintenance label
         if: >-
+          github.event_name == 'pull_request_target' &&
           (
             github.event_name == 'pull_request_target' &&
             github.event.pull_request.head.repo.fork == true
@@ -60,9 +61,9 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
           IS_FORK: ${{ github.event.pull_request.head.repo.fork == true }}
-          EVENT: ${{ toJSON(github.event) }}
           APPROVED_PR_LABEL: ${{ inputs.approved-pr-label }}
           HAS_APPROVED_PR_LABEL: ${{ contains(github.event.pull_request.labels.*.name, '${{ inputs.approved-pr-label }}') }}
+          EVENT: ${{ toJSON(github.event) }}
         shell: bash
         run: |
           echo "::error::Manual approval by the repository owner is required to enable automatic package maintenance on this PR."
