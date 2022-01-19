@@ -27,15 +27,6 @@ on:
         type: string
         default: rstudio
         required: false
-      approved-pr-label:
-        description: |
-          The name of the label indicating the external PR has been approved
-          for the Auto Package Maintenance workflow. The workflow will not be
-          run for unapproved external PRs when associated with a
-          'pull_request_target' event.
-        type: string
-        default: auto-pkg-maintenance
-        required: false
 
 name: Auto Package Maintenance
 
@@ -50,19 +41,13 @@ jobs:
       - name: Test for auto-pkg-maintenance label
         if: >-
           github.event_name == 'pull_request_target' &&
-          (
-            github.event_name == 'pull_request_target' &&
-            github.event.pull_request.head.repo.fork == true
-          ) &&
-          (
-            github.event_name == 'pull_request_target' &&
-            !contains(github.event.pull_request.labels.*.name, '${{ inputs.approved-pr-label }}')
-          )
+          github.event.pull_request.head.repo.fork == true &&
+          !contains(github.event.pull_request.labels.*.name, 'auto-pkg-maintenance')
         env:
           EVENT_NAME: ${{ github.event_name }}
           IS_FORK: ${{ github.event.pull_request.head.repo.fork == true }}
-          APPROVED_PR_LABEL: ${{ inputs.approved-pr-label }}
-          HAS_APPROVED_PR_LABEL: ${{ contains(github.event.pull_request.labels.*.name, '${{ inputs.approved-pr-label }}') }}
+          APPROVED_PR_LABEL: 'auto-pkg-maintenance'
+          HAS_APPROVED_PR_LABEL: ${{ contains(github.event.pull_request.labels.*.name, 'auto-pkg-maintenance') }}
           EVENT: ${{ toJSON(github.event) }}
         shell: bash
         run: |
