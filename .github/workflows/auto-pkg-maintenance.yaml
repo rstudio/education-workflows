@@ -61,6 +61,8 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           IS_FORK: ${{ github.event.pull_request.head.repo.fork == true }}
           EVENT: ${{ toJSON(github.event) }}
+          APPROVED_PR_LABEL: ${{ inputs.approved-pr-label }}
+          HAS_APPROVED_PR_LABEL: ${{ contains(github.event.pull_request.labels.*.name, '${{ inputs.approved-pr-label }}') }}
         shell: bash
         run: |
           echo "::error::Manual approval by the repository owner is required to enable automatic package maintenance on this PR."
