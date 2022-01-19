@@ -53,7 +53,7 @@ jobs:
             github.event.pull_request.head.repo.fork == true &&
             !contains(github.event.pull_request.labels.*.name, '${{ inputs.approved-pr-label }}')
           ) ||
-          github.event_name != 'pull_request_target'
+          false
         env:
           EVENT_NAME: ${{ github.event_name }}
           IS_FORK: ${{ github.event.pull_request.head.repo.fork }}
