@@ -2,6 +2,8 @@
 
 These workflows are intended to be copied directly into your `.github/workflows` directory and modified as needed.
 
+## Deploy pkgdown to GitHub Pages with PR previews and tagged versions
+
 You can use [usethis](https://usethis.r-lib.org) to copy this workflow into your project.
 
 ```r
