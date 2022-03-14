@@ -8,7 +8,7 @@ You can use [usethis](https://usethis.r-lib.org) to copy this workflow into your
 
 ```r
 usethis::use_github_action(
-  url = "https://github.com/rstudio/education-workflows/raw/main/examples/pkgdown.yaml"
+  url = "https://raw.githubusercontent.com/rstudio/education-workflows/main/examples/pkgdown.yaml"
 )
 ```
 
@@ -25,6 +25,6 @@ This currently requires the latest version of [r-lib/pkgdown](https://pkgdown.r-
 
 ```r
 usethis::use_github_action(
-  url = "https://github.com/rstudio/education-workflows/raw/main/examples/auto-package-maintenance.yaml"
+  url = "https://raw.githubusercontent.com/rstudio/education-workflows/main/examples/auto-pkg-maintenance.yaml"
 )
 ```
