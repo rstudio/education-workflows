@@ -8,7 +8,7 @@ You can use [usethis](https://usethis.r-lib.org) to copy this workflow into your
 
 ```r
 usethis::use_github_action(
-  url = "https://raw.githubusercontent.com/rstudio/education-workflows/main/examples/pkgdown.yaml"
+  url = "https://github.com/rstudio/education-workflows/raw/main/examples/pkgdown.yaml"
 )
 ```
 
@@ -20,3 +20,11 @@ This action:
 4. Deploys package documentation when tags starting with `v` are pushed, e.g. `v0.1.0`. The package documentation is deployed to a subdirectory of the GitHub Pages site that matches the tag, e.g. `SITE_URL/v0.1.0/`.
 
 This currently requires the latest version of [r-lib/pkgdown](https://pkgdown.r-lib.org) from GitHub.
+
+## Auto package maintenance
+
+```r
+usethis::use_github_action(
+  url = "https://github.com/rstudio/education-workflows/raw/main/examples/auto-package-maintenance.yaml"
+)
+```
