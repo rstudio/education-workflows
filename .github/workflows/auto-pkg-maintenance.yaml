@@ -76,10 +76,10 @@ jobs:
           cache-version: ${{ inputs.cache-version }}
           extra-packages: |
             local::.
-            lintr
-            styler
-            devtools
-            rmarkdown
+            any::lintr
+            any::styler
+            any::devtools
+            any::rmarkdown
             ${{ inputs.extra-packages }}
 
       - name: Git Config
