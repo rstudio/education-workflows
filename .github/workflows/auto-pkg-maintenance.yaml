@@ -89,7 +89,7 @@ jobs:
       - name: Install package locally
         if: inputs.install-local-package == 'true'
         shell: Rscript {0}
-        run: pak::pak("local::.", dependencies = FALSE)
+        run: pak::pak("local::.", dependencies = "hard")
 
       - name: Git Config
         run: |
