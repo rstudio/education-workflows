@@ -18,6 +18,10 @@ on:
         type: string
         default: "2.7.3"
         required: false
+      install-local-package:
+        type: string
+        default: 'true'
+        required: false
       # staticimports:
       #   type: boolean
       #   default: true
@@ -74,15 +78,18 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           cache-version: ${{ inputs.cache-version }}
-          packages: |
-            local::.
-            any::sessioninfo
+          packages: any::sessioninfo
           extra-packages: |
             any::lintr
             any::styler
             any::devtools
             any::rmarkdown
             ${{ inputs.extra-packages }}
+
+      - name: Install package locally
+        if: inputs.install-local-package == 'true'
+        shell: Rscript {0}
+        run: pak::pak("local::.", dependencies = FALSE)
 
       - name: Git Config
         run: |

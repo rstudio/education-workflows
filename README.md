@@ -60,6 +60,8 @@ jobs:
 
 - `pandoc-version`: Sets the pandoc version to be installed, passed to [r-lib/actions@v2/setup-pandoc](https://github.com/r-lib/actions/tree/v2/setup-pandoc).
 
+- `install-local-package`: Installs the local package in the runner, without dependencies, when `"true"`.
+
 ### Tasks
 
 Auto package maintenance performs the following common tasks:
