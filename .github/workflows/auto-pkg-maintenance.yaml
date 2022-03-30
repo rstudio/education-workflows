@@ -74,8 +74,10 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           cache-version: ${{ inputs.cache-version }}
-          extra-packages: |
+          packages: |
             local::.
+            any::sessioninfo
+          extra-packages: |
             any::lintr
             any::styler
             any::devtools
