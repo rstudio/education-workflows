@@ -87,8 +87,7 @@ If auto package maintenance is run from the main branch of the primary source re
 Currently, the workflows and actions in the branch are `v1`. When you make changes to the updates, the `v1` tag should be (forcefully) moved forward to the latest commit in `rstudio/education-workflows`. To do this run:
 
 ```bash
-git tag -f v1
-git push origin --tags -f
+git tag -f v1 && git push origin --tags -f
 ```
 
 ## License ![CC0 licensed](https://img.shields.io/github/license/rstudio/education-workflows)
