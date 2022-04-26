@@ -7,7 +7,7 @@ runs:
       shell: bash
       run: |
         if [ -f "README.Rmd" ]; then
-          Rscript -e 'devtools::build_readme(quiet = FALSE)'
+          Rscript -e 'rmarkdown::render("README.Rmd", quiet = FALSE, output_options = list(html_preview = FALSE))'
           if [[ -f README.md ]]; then
             git add README.md
           fi
