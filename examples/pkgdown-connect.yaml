@@ -106,7 +106,7 @@ jobs:
           git config --local user.name "$GITHUB_ACTOR"
           git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
           git add manifest.json && git commit -m "Update manifest.json" || echo "No manifest.json"
-          git push origin docs-private || echo "No updates to push"
+          git push origin docs-connect || echo "No updates to push"
 
   pkgdown-clean:
     if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' }}
