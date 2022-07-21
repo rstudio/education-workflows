@@ -21,6 +21,15 @@ This action:
 
 This currently requires the latest version of [r-lib/pkgdown](https://pkgdown.r-lib.org) from GitHub.
 
+An alternative version of this same workflow exists to deploy the pkgdown site to Connect by building the pkgdown site to a `docs-connect` branch and then deploying the branch to Connect. Note that you need to establish git-based deployment on your Connect site and specifically target the `docs-connect` branch.
+
+```r
+usethis::use_github_action(
+  url = "https://raw.githubusercontent.com/rstudio/education-workflows/main/examples/pkgdown-connect.yaml"
+)
+```
+
+
 ## Auto package maintenance
 
 ```r
