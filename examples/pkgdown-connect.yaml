@@ -62,6 +62,7 @@ jobs:
           extra-packages: |
             local::.
             any::pkgdown
+            any::rsconnect
 
       # If events is a PR, set subdir to 'preview/pr<pr_number>'
       - name: "[PR] Set documentation subdirectory"
