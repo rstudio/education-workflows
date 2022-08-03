@@ -116,7 +116,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: "gh-pages"
+          ref: "docs-connect"
 
       - name: Clean up PR Preview
         run: |
