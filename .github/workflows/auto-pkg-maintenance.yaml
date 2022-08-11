@@ -112,7 +112,7 @@ jobs:
         with:
           code: "roxygen2::roxygenise()"
           description: Document
-          commit-add: "man/* NAMESPACE"
+          commit-add: "man/* NAMESPACE DESCRIPTION"
 
       - name: Build README and index
         uses: rstudio/education-workflows/.github/internal/build-readme-index@v1
