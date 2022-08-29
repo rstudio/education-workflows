@@ -19,7 +19,12 @@ This action:
 3. Cleans up previews when PRs are closed.
 4. Deploys package documentation when tags starting with `v` are pushed, e.g. `v0.1.0`. The package documentation is deployed to a subdirectory of the GitHub Pages site that matches the tag, e.g. `SITE_URL/v0.1.0/`.
 
-This currently requires the latest version of [r-lib/pkgdown](https://pkgdown.r-lib.org) from GitHub.
+When using this workflow, it's a good idea to update your `_pkgdown.yml` to disable search indexing within the preview subdirectories:
+
+```yaml
+search:
+  exclude: ['preview/']
+```
 
 An alternative version of this same workflow exists to deploy the pkgdown site to Connect by building the pkgdown site to a `docs-connect` branch and then deploying the branch to Connect. Note that you need to establish git-based deployment on your Connect site and specifically target the `docs-connect` branch.
 
