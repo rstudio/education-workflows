@@ -107,6 +107,12 @@ jobs:
           code: "usethis::use_tidy_description()"
           description: Tidy Description
 
+      - name: Fix indents and trailing invisible characters
+        uses: rstudio/education-workflows/.github/internal/run-r-command@v1
+        with:
+          code: "grkstyle::grk_reindent_auto_pkg()"
+          description: Fix indents and invisible characters
+
       - name: Document
         uses: rstudio/education-workflows/.github/internal/run-r-command@v1
         with:
@@ -126,12 +132,6 @@ jobs:
             pak::pkg_install("r-lib/urlchecker")
             urlchecker::url_update()
           description: Updated Links
-
-      - name: Fix indents and trailing invisible characters
-        uses: rstudio/education-workflows/.github/internal/run-r-command@v1
-        with:
-          code: "grkstyle::grk_reindent_auto_pkg()"
-          description: Fix indents and invisible characters
 
         # When pushing to main causes package maintenance, create a pull request
       - name: Create Pull Request
