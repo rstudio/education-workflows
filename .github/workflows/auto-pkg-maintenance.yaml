@@ -81,7 +81,7 @@ jobs:
           packages: any::sessioninfo
           extra-packages: |
             any::lintr
-            any::styler
+            gadenbuie/grkstyle
             any::devtools
             any::rmarkdown
             ${{ inputs.extra-packages }}
@@ -128,7 +128,10 @@ jobs:
           description: Updated Links
 
       - name: Fix indents and trailing invisible characters
-        uses: rstudio/education-workflows/.github/internal/fix-invisibles@v1
+        uses: rstudio/education-workflows/.github/internal/run-r-command@v1
+        with:
+          code: "grkstyle::grk_reindent_auto_pkg()"
+          description: Fix indents and invisible characters
 
         # When pushing to main causes package maintenance, create a pull request
       - name: Create Pull Request
