@@ -62,6 +62,8 @@ jobs:
 
 - `install-local-package`: Installs the local package in the runner, without dependencies, when `"true"`.
 
+- `style-roxyen-examples`: Should the indentation of the examples in the roxygen documentation be adjusted? Defaults to `"true"`.
+
 ### Tasks
 
 Auto package maintenance performs the following common tasks:

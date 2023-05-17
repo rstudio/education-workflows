@@ -31,6 +31,11 @@ on:
         type: string
         default: rstudio
         required: false
+      style-roxygen-examples:
+        description: Whether to adjust indentation of roxygen examples.
+        type: boolean
+        default: true
+        required: false
 
 name: Auto Package Maintenance
 
@@ -110,7 +115,7 @@ jobs:
       - name: Fix indents and trailing invisible characters
         uses: rstudio/education-workflows/.github/internal/run-r-command@v1
         with:
-          code: "grkstyle::grk_reindent_auto_pkg()"
+          code: "grkstyle::grk_reindent_auto_pkg(include_roxygen_examples = identical('${{ inputs.style-roxygen-examples }}', 'true'))"
           description: Fix indents and invisible characters
 
       - name: Document
