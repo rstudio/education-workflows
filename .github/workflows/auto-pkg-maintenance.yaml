@@ -41,7 +41,7 @@ name: Auto Package Maintenance
 
 jobs:
   auto-pkg-maintenance:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
